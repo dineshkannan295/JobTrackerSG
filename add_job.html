@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block content %}
+<h4>Add Job</h4>
+<form method="post">
+  <div class="mb-3">
+    <label class="form-label">Reference No</label>
+    <input name="reference_no" class="form-control" required>
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Importer Name</label>
+    <input name="importer_name" class="form-control" required>
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Received Time (optional)</label>
+    <input name="received_time" type="datetime-local" class="form-control">
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Allocate To</label>
+    <select name="allocated_to" class="form-select">
+      <option value="">-- Unallocated --</option>
+      {% for u in users %}
+        <option value="{{u.username}}">{{u.username}} - {{u.full_name}}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Status</label>
+    <select name="status" class="form-select">
+      <option>Pending</option>
+      <option>In Progress</option>
+      <option>Completed</option>
+    </select>
+  </div>
+  <button class="btn btn-primary">Save</button>
+</form>
+{% endblock %}

@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="d-flex justify-content-between mb-3">
+  <div>
+    <a class="btn btn-success" href="/jobs/add">Add Job</a>
+  </div>
+  <form class="d-flex" method="get">
+    <input class="form-control me-2" type="search" placeholder="Search ref/importer" name="q" value="{{ request.args.get('q','') }}">
+    <select name="status" class="form-select me-2">
+      <option value="">All Status</option>
+      <option value="Pending" {% if request.args.get('status')=='Pending' %}selected{% endif %}>Pending</option>
+      <option value="In Progress" {% if request.args.get('status')=='In Progress' %}selected{% endif %}>In Progress</option>
+      <option value="Completed" {% if request.args.get('status')=='Completed' %}selected{% endif %}>Completed</option>
+    </select>
+    <select name="allocated" class="form-select me-2">
+      <option value="">All Users</option>
+      {% for u in users %}
+        <option value="{{u.username}}" {% if request.args.get('allocated')==u.username %}selected{% endif %}>{{u.username}}</option>
+      {% endfor %}
+    </select>
+    <button class="btn btn-primary">Filter</button>
+  </form>
+</div>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Ref</th>
+      <th>Importer</th>
+      <th>Received</th>
+      <th>Allocated</th>
+      <th>Status</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for j in jobs %}
+    <tr>
+      <td>{{ j.reference_no }}</td>
+      <td>{{ j.importer_name }}</td>
+      <td>{{ j.received_time.strftime('%Y-%m-%d %H:%M') if j.received_time }}</td>
+      <td>{{ j.allocated_to.username if j.allocated_to else '-' }}</td>
+      <td>{{ j.status }}</td>
+      <td>
+        <a class="btn btn-sm btn-outline-primary" href="/jobs/{{j.id}}/edit">Edit</a>
+      </td>
+    </tr>
+    {% else %}
+    <tr><td colspan="6">No jobs found</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

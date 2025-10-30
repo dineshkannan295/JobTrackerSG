@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block content %}
+<h4>Edit Job - {{ job.reference_no }}</h4>
+<form method="post">
+  <div class="mb-3">
+    <label class="form-label">Importer Name</label>
+    <input name="importer_name" class="form-control" value="{{ job.importer_name }}" required>
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Allocate To</label>
+    <select name="allocated_to" class="form-select">
+      <option value="">-- Unallocated --</option>
+      {% for u in users %}
+        <option value="{{u.username}}" {% if job.allocated_to and u.id==job.allocated_to.id %}selected{% endif %}>{{u.username}} - {{u.full_name}}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Status</label>
+    <select name="status" class="form-select">
+      <option {% if job.status=='Pending' %}selected{% endif %}>Pending</option>
+      <option {% if job.status=='In Progress' %}selected{% endif %}>In Progress</option>
+      <option {% if job.status=='Completed' %}selected{% endif %}>Completed</option>
+    </select>
+  </div>
+  <button class="btn btn-primary">Update</button>
+</form>
+{% endblock %}
